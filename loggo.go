@@ -17,6 +17,14 @@ const (
 	LogLevelOff   LogLevel = 3
 )
 
+// LogMiddlewareFunc is a function that acts on a request and response after the server
+// has acted on the request. The LoggedResponse is not the response itself, but just a copy of it
+type LogMiddlewareFunc func(LoggedResponse, *http.Request)
+
+// Loggo is just an io.Writer and an associated LogLevel setting
+// The functions defined for Loggo are primarily just for improving formatting and ergonomics,
+// however, the package does include some useful functions for using Loggo as middleware in
+// http server applications.
 type Loggo struct {
 	writer io.Writer
 	level  LogLevel
@@ -26,8 +34,9 @@ func NewLoggo(w io.Writer, level LogLevel) *Loggo {
 	return &Loggo{w, level}
 }
 
-type LogMiddlewareFunc func(LoggedResponse, *http.Request)
-
+// LogHandler will allow the response to be recorded and acted on after the specified http.Handler
+// has completed. The response is passed to logFunc as a LoggedResponse. The log instance should be
+// defined in the closure of the LogMiddlewareFunc
 func (log *Loggo) LogHandler(next http.Handler, logFunc LogMiddlewareFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if log.level > 0 {

@@ -35,6 +35,8 @@ func newLoggingRW(w http.ResponseWriter, buf *bytes.Buffer) *loggingRW {
 	}
 }
 
+// Implement http.ResponseWriter for loggingRW
+
 func (l *loggingRW) Header() http.Header {
 	return l.w.Header()
 }
