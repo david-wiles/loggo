@@ -1,7 +1,7 @@
 package main
 
 import (
-	"loggo"
+	"github.com/david-wiles/loggo"
 	"net/http"
 	"os"
 	"strconv"
