@@ -23,6 +23,14 @@ func main() {
 	noLoggo.Info("This won't print")
 	noLoggo.Error("This will print")
 
+	// You can also use files for log output
+	if f, err := os.Create("log.log"); err == nil {
+		fileLoggo := loggo.NewLoggo(f, 0)
+		fileLoggo.Info("Hello from file loggo")
+		// The file will be closed when cleaned up
+		err = fileLoggo.Cleanup()
+	}
+
 	// Create logging middleware
 	logMiddleware := log.LogHandleFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Your http.Handler goes here...

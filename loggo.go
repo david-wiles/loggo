@@ -34,6 +34,15 @@ func NewLoggo(w io.Writer, level LogLevel) *Loggo {
 	return &Loggo{w, level}
 }
 
+func (log *Loggo) Cleanup() error {
+	// If our writer implements io.Closer, then we should
+	// close the writer when panicking or exiting the program
+	if w, ok := log.writer.(io.Closer); ok {
+		return w.Close()
+	}
+	return nil
+}
+
 // LogHandler will allow the response to be recorded and acted on after the specified http.Handler
 // has completed. The response is passed to logFunc as a LoggedResponse. The log instance should be
 // defined in the closure of the LogMiddlewareFunc
