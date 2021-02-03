@@ -105,7 +105,7 @@ func (log Loggo) LogAccess(next http.Handler) http.Handler {
 			userAgent := w.Header.Get("User-Agent")
 			timing := int(time.Now().Sub(start).Milliseconds())
 			_, _ = log.writer.Write([]byte("[" + timeNow() + "] " + remoteAddr + " " + r.Method + " " + r.URL.Path + " " + strconv.Itoa(w.StatusCode) + " " + userAgent + " " + strconv.Itoa(timing) + "ms\n"))
-		})
+		}).ServeHTTP(w, r)
 	})
 }
 

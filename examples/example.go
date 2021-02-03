@@ -40,5 +40,5 @@ func main() {
 		log.Info("Got request: " + r.URL.String() + " Response: " + strconv.Itoa(resp.StatusCode) + " " + resp.Body.String())
 	})
 
-	_ = http.ListenAndServe(":4321", logMiddleware)
+	_ = http.ListenAndServe(":4321", log.LogAccess(logMiddleware))
 }
